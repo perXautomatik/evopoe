@@ -6,13 +6,13 @@ public class SkillTreeBuilder {
 	protected Map<Integer, SkillTreeNode> map;
 	protected Set<Long> links;
 	protected Set<Integer> linked;
-	protected Set<SkillTreeNode> entryNodes;
+	protected List<SkillTreeNode> entryNodes;
 	
 	public SkillTreeBuilder() {
 		this.map = new TreeMap<Integer, SkillTreeNode>();
 		this.links = new HashSet<Long>();
 		this.linked = new HashSet<Integer>();
-		this.entryNodes = new HashSet<SkillTreeNode>();
+		this.entryNodes = new ArrayList<SkillTreeNode>();
 	}
 	
 	public void addNode(SkillTreeNode node) {
@@ -30,6 +30,10 @@ public class SkillTreeBuilder {
 	public void setEntryNode(SkillTreeNode node) {
 		if (node == null) {
 			throw new IllegalArgumentException("Invalid node ID");
+		}
+		
+		if (entryNodes.contains(node)) {
+			return;
 		}
 		
 		entryNodes.add(node);

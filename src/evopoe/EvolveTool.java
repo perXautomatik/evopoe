@@ -3,6 +3,8 @@ package evopoe;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -24,9 +26,13 @@ public class EvolveTool {
 		tree = SkillTree.fromFile("passive-skill-tree.json");
 		System.err.printf("Loaded skill tree with %d nodes\n", tree.getNodeCount());
 		
-		target = new BuildTarget();
+		target = new BuildTarget(parseStartingClass(args));
 		
 		for (String text : args) {
+			if (text.equals("")) {
+				continue;
+			}
+			
 			String[] parts = text.split("=");
 			String modText = parts[0].trim();
 			double weight = (parts.length == 1) ? 1.0 : Double.parseDouble(parts[1].trim());
@@ -39,6 +45,33 @@ public class EvolveTool {
 		}
 		
 		search = new BuildSearch(tree, target, 25, 85);
+	}
+	
+	private static Map<String, Integer> startingClasses = new HashMap<String, Integer>();
+	
+	static {
+		startingClasses.put("ranger", 0);
+		startingClasses.put("marauder", 1);
+		startingClasses.put("duelist", 2);
+		startingClasses.put("templar", 3);
+		startingClasses.put("witch", 4);
+		startingClasses.put("shadow", 5);
+		startingClasses.put("scion", 6);
+	}
+	
+	protected static int parseStartingClass(String[] args) {
+		for (int i=0; i < args.length; i++) {
+			Integer id = startingClasses.get(args[i].toLowerCase());
+			
+			if (id == null) {
+				continue;
+			}
+			
+			args[i] = "";
+			return id;
+		}
+		
+		return -1;
 	}
 	
 	protected void addSingleMod(String text, double weight) {

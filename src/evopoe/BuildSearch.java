@@ -18,7 +18,6 @@ public class BuildSearch implements Comparator<Build> {
 		this.mutationRate = 1.0;
 		
 		setPopulation(popSize);
-		
 	}
 	
 	public void setPopulation(int size) {
@@ -34,6 +33,10 @@ public class BuildSearch implements Comparator<Build> {
 		
 		for (int i=0; i < data.length; i++) {
 			data[i] = random.nextInt();
+		}
+		
+		if (target.getStartingClass() >= 0) {
+			data[0] = target.getStartingClass();
 		}
 		
 		return new Build(tree, data);
@@ -85,7 +88,10 @@ public class BuildSearch implements Comparator<Build> {
 				data[x]++;// ^= random.nextInt();
 			//}
 		}
-	
+		
+		if (target.getStartingClass() >= 0) {
+			data[0] = target.getStartingClass();
+		}
 		
 		return new Build(tree, data);
 	}

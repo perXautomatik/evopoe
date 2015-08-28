@@ -3,12 +3,18 @@ package evopoe;
 import java.util.*;
 
 public class BuildTarget {
+	protected int startingClass;
 	protected Map<String, Double> goals;
 	protected WeakHashMap<Build, Double> scoreCache;
 	
-	public BuildTarget() {
+	public BuildTarget(int startingClass) {
+		this.startingClass = startingClass;
 		this.goals = new HashMap<String, Double>();
 		this.scoreCache = new WeakHashMap<Build, Double>();
+	}
+	
+	public int getStartingClass() {
+		return startingClass;
 	}
 	
 	public double getWeight(String goal) {
