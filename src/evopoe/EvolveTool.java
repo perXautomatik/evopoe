@@ -44,7 +44,7 @@ public class EvolveTool {
 			}
 		}
 		
-		search = new BuildSearch(tree, target, 25, 85);
+		search = new BuildSearch(tree, target, 10, 85);
 	}
 	
 	private static Map<String, Integer> startingClasses = new HashMap<String, Integer>();
@@ -82,14 +82,21 @@ public class EvolveTool {
 		}
 	}
 	
-	protected void addMultiMod(String text, double weight) {
-		text = text.replace("*", ".*");
+	protected void addMultiMod(String originalText, double weight) {
+		int matched = 0;
+		
+		String text = originalText.replace("*", ".*");
 		Pattern pattern = Pattern.compile(text);
 		
 		for (String mod : tree.getAllMods()) {
 			if (pattern.matcher(mod).matches()) {
 				addSingleMod(mod, weight);
+				matched++;
 			}
+		}
+		
+		if (matched <= 0) {
+			System.err.printf("WARNING: '%s' doesn't match anything\n", originalText);
 		}
 	}
 	

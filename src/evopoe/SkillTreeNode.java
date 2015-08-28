@@ -44,6 +44,7 @@ public class SkillTreeNode {
 		text = text.replace(" ", "");
 		text = text.replace("%", "");
 		text = text.replace(".", "");
+		text = text.replace(",", "");
 		text = text.replace("\n", "");
 		text = text.replace("\r", "");
 		text = text.trim();

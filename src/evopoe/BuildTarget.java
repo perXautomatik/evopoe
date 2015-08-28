@@ -27,7 +27,7 @@ public class BuildTarget {
 	}
 	
 	public String addGoal(String mod, double weight) {
-		mod = mod.replaceAll("[0-9.% ]", "");
+		mod = mod.replaceAll("[0-9.% ,\r\n]", "");
 		mod = mod.toLowerCase();
 		
 		//if (goals.containsKey(mod)) {

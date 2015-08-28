@@ -42,14 +42,13 @@ public class Build {
 		while (!openNodes.isEmpty() && pos < data.length) {
 			// Grab a node from the open list
 			int x = Math.abs(data[pos] % openNodes.size());
-			SkillTreeNode node = openNodes.remove(x);;//openNodes.get(x);
+			SkillTreeNode node = openNodes.remove(x);
 			pos++;
 
 			if (node == null) {
 				throw new NullPointerException();
 			}
-
-			//openNodes.remove(node);
+			
 			visited.add(node);
 			
 			for (SkillTreeNode sibling : node.getSiblings()) {

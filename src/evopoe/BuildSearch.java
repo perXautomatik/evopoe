@@ -46,28 +46,9 @@ public class BuildSearch implements Comparator<Build> {
 		return mutationRate;
 	}
 	
-	//public void setMutationRate(double r) {
-	//	if (r <= 0) {
-	//		throw new IllegalArgumentException("Mutation rate cannot be zero or negative");
-	//	}
-	//	
-	//	this.mutationRate = r;
-	//}
-	
 	public Build cross(Build a, Build b) {
 		int count = a.getDataSize();
 		int[] data = new int[count];
-		/*
-		int i;
-		
-		for (i=0; i < count; i++) {
-			if (random.nextFloat() >= 0.5) {
-				data[i] = a.getDataValue(i);
-			} else {
-				data[i] = b.getDataValue(i);
-			}
-		}
-		*/
 		
 		int split = random.nextInt(count - 1);
 		
@@ -75,18 +56,14 @@ public class BuildSearch implements Comparator<Build> {
 			data[i] = a.getDataValue(i);
 		}
 		
-		for (int i=split; i < count; i++) {
-			data[i] = b.getDataValue(i);
-		}
-		
 		if (random.nextDouble() <= mutationRate) {
-			//int p = 1;// + 5 * random.nextInt(1 + (int)(55 * mutationRate));
-			
-			//for (int i=0; i < p; i++) {
-				//int x = random.nextInt(1 + split);
-				int x = random.nextInt(count);
-				data[x]++;// ^= random.nextInt();
-			//}
+			for (int i=split; i < count; i++) {
+				data[i] = random.nextInt();
+			}
+		} else {
+			for (int i=split; i < count; i++) {
+				data[i] = b.getDataValue(i);
+			}
 		}
 		
 		if (target.getStartingClass() >= 0) {
@@ -95,19 +72,6 @@ public class BuildSearch implements Comparator<Build> {
 		
 		return new Build(tree, data);
 	}
-	
-	//protected boolean checkMutate() {
-	//	return random.nextFloat() <= mutationRate;
-	//}
-	
-	//protected void mutate(int[] data) {
-	//	int count = 5 * random.nextInt(5);
-	//	
-	//	for (int x=0; x < count; x++) {
-	//		int i = random.nextInt(data.length);
-	//		data[i] ^= random.nextInt();
-	//	}
-	//}
 	
 	public Build cross() {
 		int a, b;
@@ -129,25 +93,18 @@ public class BuildSearch implements Comparator<Build> {
 		double worstScore = target.score(getWorst());
 		double span = (bestScore - worstScore);
 		double r = span / bestScore;
-		//r = r * r;
-		if (r > 1.0) r = 1.0;
-		r = 1.0 - r;
-		//r = r * 0.05;
-		mutationRate = 0.75 * r;
 		
-		//mutationRate = 0.05;
-		//System.err.printf("rate=%f\n", mutationRate);
-		
-		int limit = count - 1;
-		
-		population[count / 2 - 2] = generateBuild();
-		//
-		for (int i=count / 2; i < limit; i++) {
-			population[i] = cross();
+		if (r > 1.0) {
+			r = 0.0;
+		} else {
+			r = 1.0 - r;
 		}
 		
-		population[limit] = cross(population[0], generateBuild());
-		//population[limit] = generateBuild();
+		mutationRate = 0.5 * r;
+		
+		for (int i=count / 2; i < count; i++) {
+			population[i] = cross();
+		}
 	}
 	
 	public Build getBest() {
